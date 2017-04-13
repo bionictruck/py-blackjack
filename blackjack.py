@@ -7,6 +7,11 @@ player = []
 wallet = Decimal('100.00')
 wager = 0
 
+### Heart = u"\u2665")
+### Spade = u"\u2660"
+### Club = u"\u2663"
+### Diamond = u"\u2666"
+
 def bet():
     global wallet
     global wager
