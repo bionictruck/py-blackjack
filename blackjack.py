@@ -1,9 +1,10 @@
 import random
 import time
+from decimal import Decimal
 
 dealer = []
 player = []
-wallet = 100
+wallet = Decimal('100.00')
 wager = 0
 
 def bet():
@@ -29,27 +30,32 @@ def play():
     global wager
     dealer.clear()
     player.clear()
-    dealer.append(random.randrange(1, 11))
-    dealer.append(random.randrange(1, 11))
-    player.append(random.randrange(1, 11))
-    player.append(random.randrange(1, 11))
+    dealer.append(random.randrange(2, 12))
+    dealer.append(random.randrange(2, 12))
+    player.append(random.randrange(2, 12))
+    player.append(random.randrange(2, 12))
     print("The dealer's upcard is " + str(dealer[0]))
     print("You have a total of " + str(sum(player)))
     if sum(dealer) == 21:
         print("The dealer has 21. BLACKJACK! Better luck next time.")
-        wallet -= wager
+        wallet -= Decimal(wager)
         playagain()
     elif sum(player) == 21:
         print("You have 21. BLACKJACK!")
-        wallet += wager
+        wallet += Decimal((wager * 3 / 2))
         playagain()
     else:
-        choice = input("Would you like to (H)it or (S)tand? ")
+        choice = input("Would you like to (H)it, (S)tand or (D)ouble Down? ")
         if choice.lower() == "h" or  choice.lower() == "hit":
             hit()
         elif choice.lower() == "s" or choice.lower() == "stand":
             print("You have chosen to stand.")
             time.sleep(1)
+            computer()
+        elif choice.lower() == "d" or choice.lower() == "double down":
+            wager += wager
+            player.append(random.randrange(2, 12))
+            print("You doubled down, increasing your bet to $" + str(wager) + " and have a total of " + str(sum(player)))
             computer()
 
 def hit():
@@ -57,7 +63,7 @@ def hit():
     global wager
     print("You have chosen to hit.")
     time.sleep(1)
-    player.append(random.randrange(1, 10))
+    player.append(random.randrange(2, 12))
     print("You have a total of " + str(sum(player)))
     if sum(player) <= 21:
         print("The dealer's upcard is " + str(dealer[0]))
@@ -79,10 +85,10 @@ def computer():
     time.sleep(2)
     if sum(dealer) < 17:
         print("The dealer takes a hit")
-        dealer.append(random.randrange(1, 10))
+        dealer.append(random.randrange(2, 12))
         if sum(dealer) < 17:
             computer()
-        elif sum(dealer) > 17 and sum(dealer) < 21:
+        elif sum(dealer) > 17 and sum(dealer) <= 21:
             print("The dealer stands with " + str(sum(dealer)))
             time.sleep(1)
             result()
