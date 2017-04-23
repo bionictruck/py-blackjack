@@ -38,10 +38,14 @@ def play():
     os.system('clear')
     dealer.clear()
     player.clear()
-    dealer.append(random.randrange(2, 12))
-    dealer.append(random.randrange(2, 12))
-    player.append(random.randrange(2, 12))
-    player.append(random.randrange(2, 12))
+    dealer.append(random.randrange(1, 11))
+    dealer.append(random.randrange(1, 11))
+    if dealer[0] == 1:
+        dealer[0] = 11
+    if dealer[1] == 1:
+        dealer[1] = 11
+    player.append(random.randrange(1, 11))
+    player.append(random.randrange(1, 11))
     print("The dealer's upcard is " + str(dealer[0]))
     print("You have a total of " + str(sum(player)))
     if sum(dealer) == 21:
@@ -57,26 +61,43 @@ def play():
         if choice.lower() == "h" or  choice.lower() == "hit":
             hit()
         elif choice.lower() == "s" or choice.lower() == "stand":
-            print("You have chosen to stand.")
+            print("You have chosen to stand with " + str(sum(player)) + ".")
             time.sleep(1)
             computer()
         elif choice.lower() == "d" or choice.lower() == "double down":
             wager += wager
-            player.append(random.randrange(2, 12))
-            if sum(player) > 21:
-                print("Sorry, you are over 21 and have busted.")
-                wallet -= wager
-                playagain()
+            player.append(random.randrange(1, 11))
+            if player[-1] == 1:
+                if (sum(player) + 10) <= 21:
+                    player[-1] = 11
+                    print("You doubled down, increasing your bet to $" + str(wager) + " and have a total of " + str(sum(player)))
+                    computer()
+                else:
+                    player[-1] = 1
+                    print("You doubled down, increasing your bet to $" + str(wager) + " and have a total of " + str(sum(player)))
+                    computer()
             else:
-                print("You doubled down, increasing your bet to $" + str(wager) + " and have a total of " + str(sum(player)))
-                computer()
+                if sum(player) < 21:
+                    print("You doubled down, increasing your bet to $" + str(wager) + " and have a total of " + str(sum(player)))
+                    computer()
+                else:
+                    print("Sorry, you are over 21 and have busted.")
+                    wallet -= wager
+                    playagain()                                            
 
 def hit():
     global wallet
     global wager
     print("You have chosen to hit.")
     time.sleep(1)
-    player.append(random.randrange(2, 12))
+    player.append(random.randrange(1, 11))
+    if player[-1] == 1:
+        ace = input("You recieved an Ace. Would you like the Ace to be a 1 or 11? Type O or E. ")
+        if ace.lower() == "one" or ace.lower() == "o":
+            print("You have a total of " + str(sum(player)))
+        if ace.lower() == "eleven" or ace.lower() == "e":
+            player[-1] = 11
+            print("You have a total of " + str(sum(player)))
     print("You receive a " + str(player[-1]) + " and have a total of " + str(sum(player)))
     if sum(player) <= 21:
         print("The dealer's upcard is " + str(dealer[0]))
@@ -97,19 +118,28 @@ def computer():
     print("The dealer has a total of " + str(sum(dealer)))
     time.sleep(2)
     if sum(dealer) < 17:
-        dealer.append(random.randrange(2, 12))
-        print("The dealer takes a hit receives a " + str(dealer[-1]))
-        time.sleep(1)
-        if sum(dealer) < 17:
-            computer()
-        elif sum(dealer) >= 17 and sum(dealer) <= 21:
-            print("The dealer stands with " + str(sum(dealer)))
-            time.sleep(1)
-            result()
+        dealer.append(random.randrange(1, 11))
+        if dealer[-1] == 1:
+            print("The dealer takes a hit and receives an Ace.")
+            if (sum(dealer) + 10) <= 21:
+                dealer[-1] = 11
+                ("The dealer now has " + str(sum(dealer)))
+            else:
+                ("The dealer now has " + str(sum(dealer)))
+                computer()
         else:
-            print("The dealer has busted! You win!")
-            wallet += wager
-            playagain()
+            print("The dealer takes a hit receives a " + str(dealer[-1]))
+            time.sleep(1)
+            if sum(dealer) < 17:
+                computer()
+            elif sum(dealer) >= 17 and sum(dealer) <= 21:
+                print("The dealer stands with " + str(sum(dealer)))
+                time.sleep(1)
+                result()
+            else:
+                print("The dealer has busted! You win!")
+                wallet += wager
+                playagain()
     elif sum(dealer) >= 17:
         print("The dealer stands with " + str(sum(dealer)))
         time.sleep(1)
