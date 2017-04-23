@@ -1,3 +1,4 @@
+import os
 import random
 import time
 from decimal import Decimal
@@ -15,6 +16,7 @@ wager = 0
 def bet():
     global wallet
     global wager
+    os.system('clear')
     if wallet <= 0:
         print("You're out of money! See you next time!")
         quit()
@@ -33,6 +35,7 @@ def bet():
 def play():
     global wallet
     global wager
+    os.system('clear')
     dealer.clear()
     player.clear()
     dealer.append(random.randrange(2, 12))
@@ -60,8 +63,13 @@ def play():
         elif choice.lower() == "d" or choice.lower() == "double down":
             wager += wager
             player.append(random.randrange(2, 12))
-            print("You doubled down, increasing your bet to $" + str(wager) + " and have a total of " + str(sum(player)))
-            computer()
+            if sum(player) > 21:
+                print("Sorry, you are over 21 and have busted.")
+                wallet -= wager
+                playagain()
+            else:
+                print("You doubled down, increasing your bet to $" + str(wager) + " and have a total of " + str(sum(player)))
+                computer()
 
 def hit():
     global wallet
@@ -69,7 +77,7 @@ def hit():
     print("You have chosen to hit.")
     time.sleep(1)
     player.append(random.randrange(2, 12))
-    print("You have a total of " + str(sum(player)))
+    print("You receive a " + str(player[-1]) + " and have a total of " + str(sum(player)))
     if sum(player) <= 21:
         print("The dealer's upcard is " + str(dealer[0]))
         choice = input("Would you like to (H)it or (S)tand? ")
@@ -89,8 +97,9 @@ def computer():
     print("The dealer has a total of " + str(sum(dealer)))
     time.sleep(2)
     if sum(dealer) < 17:
-        print("The dealer takes a hit")
         dealer.append(random.randrange(2, 12))
+        print("The dealer takes a hit receives a " + str(dealer[-1]))
+        time.sleep(1)
         if sum(dealer) < 17:
             computer()
         elif sum(dealer) >= 17 and sum(dealer) <= 21:
@@ -118,6 +127,7 @@ def result():
     elif sum(dealer) < sum(player):
         print("You have won!")
         wallet += wager
+        print("You now have $" + str(wallet))
         playagain()
     else:
         print("This hand is a push.")
