@@ -7,7 +7,7 @@ player = []
 wallet = Decimal('100.00')
 wager = 0
 
-### Heart = u"\u2665")
+### Heart = u"\u2665"
 ### Spade = u"\u2660"
 ### Club = u"\u2663"
 ### Diamond = u"\u2666"
@@ -93,7 +93,7 @@ def computer():
         dealer.append(random.randrange(2, 12))
         if sum(dealer) < 17:
             computer()
-        elif sum(dealer) > 17 and sum(dealer) <= 21:
+        elif sum(dealer) >= 17 and sum(dealer) <= 21:
             print("The dealer stands with " + str(sum(dealer)))
             time.sleep(1)
             result()
