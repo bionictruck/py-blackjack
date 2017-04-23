@@ -22,7 +22,7 @@ def bet():
         quit()
     else:
         print("You have $" + str(wallet) + " to play with.")
-        wager = int(input("how much would you like to bet? $"))
+        wager = int(input("How much would you like to bet? $"))
         if wager > wallet:
             print("You don't have enough money! Enter a bet less than $" + str(wallet))
             bet()
